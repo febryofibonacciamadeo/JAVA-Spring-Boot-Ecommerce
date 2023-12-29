@@ -1,24 +1,88 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <title>Product Listing</title>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <title>Product List</title>
 </head>
 <body>
-    <h2>Product Listing</h2>
-    <table border="1">
-        <tr>
-            <th>Product ID</th>
-            <th>Product Name</th>
-            <th>Price</th>
-        </tr>
-        <tr th:each="product : ${products}">
-            <td th:text="${product.productId}"></td>
-            <td th:text="${product.productName}"></td>
-            <td th:text="${product.price}"></td>
-        </tr>
-    </table>
+    <div class="position-relative">
+      <div class="position-absolute start-50 top-50 translate-middle-x">
+        <div class="card mt-5" style="width: 90vw;">
+          <div class="card-header">
+            <h2>Product List</h2>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                  <tr>
+                    <th scope="col">Barcode</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="product : ${products}">
+                    <td class="productId" th:text="${product.productId}"></td>
+                    <td class="productName" th:text="${product.productName}"></td>
+                    <td class="price" th:text="${product.price}"></td>
+                  </tr>
+                  <tr>
+                    <form id="add_product" th:action="@{/product/add}" method="post" th:object="${product}">
+                      <td>
+                        <input onkeydown="handleKeyPress(event)" type="text" id="productId" name="productId" th:field="*{productId}" class="form-control" required autocomplete="off" placeholder="Enter product barcode...">
+                      </td>
+                      <td>
+                        <input onkeydown="handleKeyPress(event)" type="text" id="productName" name="productName" th:field="*{productName}" class="form-control" required autocomplete="off" placeholder="Enter product name...">
+                      </td>
+                      <td>
+                        <input onkeydown="handleKeyPress(event)" type="number" id="price" name="price" th:field="*{price}" class="form-control" required autocomplete="off" placeholder="Enter product price...">
+                      </td>
+                    </form>
+                  </tr>
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-</body>
+    <script th:inline="javascript">
+      var products = /*[[${products}]]*/ [];
+      var priceElement = document.getElementsByClassName("price");
+
+      for(var i = 0; i < priceElement.length; i++) {
+        var currencyVal = parseFloat(priceElement[i].innerText);
+        var formattedCurrency = currencyVal.toLocaleString("id-ID", {
+          style: "currency",
+          currency: "IDR"
+        });
+        priceElement[i].innerText = formattedCurrency;
+      }
+
+      function handleKeyPress(event) {
+        if(event.keyCode === 13) {
+          document.getElementById("add_product").submit();
+          event.preventDefault();
+        }
+      }
+
+      var productIdElement = document.getElementsByClassName("productId");
+      var productNameElement = document.getElementsByClassName("productName");
+      for(var i = 0; i < productNameElement.length; i++) {
+        productIdElement[i].addEventListener("dblclick", function() { alert("Can't edit a Barcode") });
+        productNameElement[i].addEventListener("dblclick", createInputEditProductName.bind(null, i));
+      }
+      
+      function createInputEditProductName(index) {
+        var inputproductName = document.createElement("input");
+        inputproductName.type = "text";
+        inputproductName.value = products[index].productName;
+        inputproductName.name = "productName";
+        inputproductName.className = "form-control";
+        productNameElement[index].innerHTML = "";
+        productNameElement[index].appendChild(inputproductName);
+      }
+    </script>
+  </body>
 </html>

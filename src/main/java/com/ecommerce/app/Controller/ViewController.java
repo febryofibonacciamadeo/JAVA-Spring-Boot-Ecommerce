@@ -28,19 +28,23 @@ public class ViewController {
 
     @GetMapping("/home")
     public String home(Model model) {
+        List<Product> products = productService.getAll();
+        model.addAttribute("products", products);
         return "index";
-    }
-
-    @GetMapping("/product/add")
-    public String addProduct() {
-        return "addProduct";
     }
 
     @GetMapping("/product")
     public String showProductListing(Model model) {
         List<Product> products = productService.getAll();
         model.addAttribute("products", products);
+        model.addAttribute("product", new Product());
         return "products";
+    }
+
+    @GetMapping("/product/add")
+    public String add_product(Model model) {
+        model.addAttribute("product", new Product());
+        return "add-product";
     }
 
     @GetMapping("/cart")

@@ -7,23 +7,25 @@
 <body>
     <div class="position-relative">
         <div class="position-absolute top-50 start-50 translate-middle-x">
-            <div class="card mt-5">
+            <div class="card mt-5" style="width: 50vw;">
                 <div class="card-header">
                     <h5>Add Product</h5>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/product/add}" method="post" th:object="${user}">
+                    <form th:action="@{/product/add}" method="post" th:object="${product}">
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" id="username" name="username" th:field="*{username}" class="form-control" required autocomplete="off">
+                            <label for="productId" class="form-label">Product Barcode</label>
+                            <input type="text" id="productId" name="productId" th:field="*{productId}" class="form-control" required autocomplete="off">
                         </div>
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" id="password" name="password" th:field="*{password}" class="form-control" required>
-            
+                            <label for="productName" class="form-label">Product Name</label>
+                            <input type="text" id="productName" name="productName" th:field="*{productName}" class="form-control" required autocomplete="off">
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="number" id="price" name="price" th:field="*{price}" class="form-control" required autocomplete="off">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <a th:href="@{/register}" class="btn btn-light">Registration</a>
                     </form>
                 </div>
             </div>

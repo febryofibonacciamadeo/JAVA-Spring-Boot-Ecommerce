@@ -2,6 +2,7 @@ package com.ecommerce.app.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import com.ecommerce.app.Service.UserService;
 public class UserController {
     @Autowired
     private UserService userService;
+
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") User user) {
         userService.registerUser(user.getUsername(), user.getPassword());
@@ -21,11 +23,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@ModelAttribute User user) {
+    public String loginUser(@ModelAttribute User user, Model model) {
         User loggedUser = userService.loginUser(user.getUsername(), user.getPassword());
         if(loggedUser != null) {
-            return "redirect:/";
+            return "redirect:/home";
         } else {
+            model.addAttribute("error", "Invalid username or password. Please try again.");
             return "redirect:/login";
         }
     }

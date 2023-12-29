@@ -21,7 +21,10 @@ public class ProductService {
     }
 
     public void addProduct(Product product) {
-        productRepository.save(product);
+        Boolean isExist = productRepository.existsById(product.getProductId());
+        if(!isExist) {
+            productRepository.save(product);
+        }
     }
 
     public Product searchProduct(String productId) {

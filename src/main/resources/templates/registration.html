@@ -7,11 +7,15 @@
 <body>
     <div class="position-relative">
         <div class="position-absolute top-50 start-50 translate-middle-x">
-            <div class="card mt-5">
+            <div class="card mt-5" style="width: 50vw;">
                 <div class="card-header">
                     <h5>User Registration</h5>
                 </div>
                 <div class="card-body">
+                    <div th:if="${message}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <p th:text="${message}"></p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                     <form th:action="@{/user/register}" method="post" th:object="${user}">
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
